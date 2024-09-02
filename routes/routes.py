@@ -9,7 +9,6 @@ from entities.entities import Upload, ConfirmBody
 from datetime import datetime
 from typing import Optional
 
-from typing import List
 
 router = APIRouter()
 
@@ -42,8 +41,9 @@ def receive_image(informations: Upload):
                                                       "error_description": 'Invalid measure datetime'})
 
     # VERIFICAR NO BANCO SE EXISTE UMA VERIFICAÇÃO FEITA NO MES ATUAL
-    if not db_functions.find_one_measure(informations['customer_code'], informations['measure_type'],
-                                         informations['measure_datetime']):
+    if not db_functions.find_one_measure_by_date_and_type_and_id(informations['customer_code'],
+                                                                 informations['measure_type'],
+                                                                 informations['measure_datetime']):
         return JSONResponse(status_code=409, content={"error_code": "DOUBLE_REPORT",
                                                       "error_description": "Leitura do mês já realizada"})
 

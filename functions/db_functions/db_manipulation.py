@@ -1,4 +1,3 @@
-from typing import List, Dict
 from dotenv import load_dotenv
 from datetime import datetime
 import base64
@@ -7,7 +6,7 @@ import os
 import psycopg2
 from psycopg2 import pool
 
-from functions.generate_functions.generate import generate_uuid
+from functions.generate_functions.generate_uuid import generate_uuid
 
 load_dotenv()
 
@@ -67,7 +66,7 @@ def find_one_user_by_code(code: str) -> bool:
             release_db_connection(connection)
 
 
-def find_one_measure(user_code: str, measure_type: str, date: datetime) -> bool:
+def find_one_measure_by_date_and_type_and_id(user_code: str, measure_type: str, date: datetime) -> bool:
     connection = get_db_connection()
     if connection:
         try:
@@ -97,7 +96,6 @@ def find_one_measure_by_uuid(measure_uuid: str) -> bool:
                 cursor.execute(find_one_query, (measure_uuid,))
 
                 record = cursor.fetchone()
-                print(record)
                 if record:
                     return True
                 else:
@@ -171,7 +169,6 @@ def check_confirm_measure(measure_uuid: str) -> bool:
                 cursor.execute(find_one_query, (measure_uuid,))
 
                 record = cursor.fetchone()
-                print(record)
                 if int(record[0]) == 1:
                     return True
                 else:
